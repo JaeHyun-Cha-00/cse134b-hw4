@@ -11,6 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 
@@ -46,8 +47,13 @@
 
             <section class="hobby">
                 <h2>Hobby</h2>
-                <p>Soccer (Ateltico Madrid)</p>
+                <p>Soccer (Atletico Madrid)</p>
                 <p>Gym</p>
+            </section>
+
+            <section class="toggle">
+                <button id="light_mode"><i class="fa-solid fa-sun"></i></button>
+                <button id="dark_mode"><i class="fa-solid fa-moon"></i></button>
             </section>
         </aside>
 
@@ -105,6 +111,27 @@
             </div>
         </main>
     </div>
+
+    <script>
+        const dark_mode_button = document.getElementById("dark_mode");
+        const light_mode_button = document.getElementById("light_mode");
+        const current_theme = localStorage.getItem('data-theme');
+        
+        dark_mode_button.addEventListener('click', () => {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('data-theme', 'dark')
+        });
+
+        light_mode_button.addEventListener('click', () => {
+            document.documentElement.setAttribute('data-theme', 'light');
+            localStorage.setItem('data-theme', 'light')
+        })
+
+        if(current_theme){
+            document.documentElement.setAttribute('data-theme', current_theme);
+        }
+
+    </script>
 
     <noscript>
         JavaScript is disabled in your browser. Enable JavaScript to use features of this site.

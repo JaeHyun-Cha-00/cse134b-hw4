@@ -34,6 +34,7 @@ form {
         background-color: var(--main_background_color, #1a1a1e);
         border: 1px solid #666;
         border-radius: 0.4rem;
+        color: var(--text_color);
     }
 
     textarea {
