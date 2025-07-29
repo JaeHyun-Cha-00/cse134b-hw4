@@ -12,6 +12,22 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        @keyframes fade {
+            0% {opacity: 1;}
+            100% {opacity: 0;}
+        }
+
+        .fade {
+            animation: fade 2s ease-in-out forwards;
+            color: gray;
+        }
+
+        .warning {
+            color: Orange;
+        }
+    </style>
 </head>
 
 <body>
@@ -77,20 +93,23 @@
                   <legend>Contact Me</legend>
                 
                   <label for="name">Name:</label>
-                  <input type="text" id="name" name="name" required><br>
+                  <input type="text" id="name" name="name" style="color: white;" pattern="[a-zA-Z0-9 ._\-]*" required><br>
                 
                   <label for="email">Email:</label>
-                  <input type="email" id="email" name="email" autocomplete="email" required><br>
+                  <input type="email" id="email" name="email" placeholder="example@example.com" style="color: white;" pattern="[a-zA-Z0-9 .\-_@]*" required><br>
                 
                   <label for="comment">Comment:</label>
-                  <textarea id="comment" name="comment" required></textarea><br>
-                
+                  <textarea id="comment" name="comment" maxlength="100" minlength="5" style="color: white;" required></textarea><br>
+                  <small id="length_counter">100 characters remaining</small> <br>
                   <input name="possible_bot" value="true" type="hidden">
 
                   <button type="submit">Submit</button>
 
                   <output id="error_message"></output>
                   <output id="info_message"></output>
+
+                  <input type="hidden" name="form-errors" id="form-errors">
+
                 </fieldset>
             </form>
 
@@ -126,6 +145,61 @@
             document.documentElement.setAttribute('data-theme', current_theme);
         }
 
+    </script>
+
+    <script>
+        const form_errors = [];
+
+        const name_input = document.getElementById('name');
+        const comment = document.getElementById('comment');
+        const length_counter = document.getElementById('length_counter');
+        const error_output = document.getElementById('error_message');
+        const form = document.querySelector('form');
+        const errorField = document.getElementById('form-errors');
+
+        // Name validation
+        name_input.addEventListener('input', function () {
+            const valid_letters = /^[a-zA-Z0-9 ._\-]*$/;
+
+            if (!valid_letters.test(name_input.value)) {
+                name_input.value = name_input.value.replace(/[^a-zA-Z0-9 ._\-]/g, '');
+
+                name_input.setCustomValidity('Wrong input!');
+                error_output.textContent = name_input.validationMessage;
+
+                error_output.classList.remove('fade');
+                void error_output.offsetWidth;
+                error_output.classList.add('fade');
+
+                form_errors.push({
+                    field: 'name',
+                    message: 'Has illegal characters'
+                });
+            } else {
+                name_input.setCustomValidity('');
+                error_output.textContent = '';
+            }
+        });
+
+        // Comment length counter
+        const maximum_length = 100;
+        comment.addEventListener('input', () => {
+            const curr_length = comment.value.length;
+            const remaining_length = maximum_length - curr_length;
+
+            if (remaining_length >= 50) {
+                length_counter.textContent = `${remaining_length} characters remaining`;
+                length_counter.classList.remove('warning');
+            } else if (remaining_length >= 0) {
+                length_counter.textContent = `Warning: ${remaining_length} characters remaining`;
+                length_counter.classList.add('warning');
+            }
+        });
+
+        // Submit handler
+        form.addEventListener('submit', function () {
+            errorField.value = JSON.stringify(form_errors);
+        });
     </script>
 
     <noscript>
